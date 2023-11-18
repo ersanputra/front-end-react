@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { data } from '../data/data.js';
 
 const Food = () => {
-  //   console.log(data);
+
   const [foods, setFoods] = useState(data);
 
-  //   Filter Type burgers/pizza/etc
+
   const filterType = (category) => {
     setFoods(
       data.filter((item) => {
@@ -14,7 +14,6 @@ const Food = () => {
     );
   };
 
-  //   Filter by price
   const filterPrice = (price) => {
     setFoods(
       data.filter((item) => {
@@ -45,19 +44,19 @@ const Food = () => {
               onClick={() => filterType('cakes')}
               className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
             >
-              Burgers
+            Cakes
             </button>
             <button
               onClick={() => filterType('pastry')}
               className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
             >
-              Pizza
+              Pastry
             </button>
             <button
               onClick={() => filterType('bakery')}
               className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
             >
-              Salads
+                Bakery
             </button>
           
           </div>
