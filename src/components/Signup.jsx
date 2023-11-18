@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaFacebookF, FaInstagram, FaGoogle, FaRegEnvelope, FaRegUser } from 'react-icons/fa';
 import { MdLockOutline, MdOutlineSmartphone } from 'react-icons/md';
-import { postRegistration } from '@/rest/api'; // Assuming postRegistration is the correct function name
+import { postRegistrtion } from '@/rest/api'; // Assuming postRegistration is the correct function name
 
 const signInBackgroundImageUrl = 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8fDA%3D';
 const backgroundImageUrl = 'https://images.unsplash.com/photo-1622090860720-c4a77e146284?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80';
@@ -9,9 +9,8 @@ const backgroundImageUrl = 'https://images.unsplash.com/photo-1622090860720-c4a7
 export default function Signup({ onToggleForm }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [repassword, setRepassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [number, setNumber] = useState('');
+  const [full_name, setFull_name] = useState('');
+  const [phone_number, setPhone_number] = useState('');
 
   const notAMemberSectionStyle = {
     backgroundImage: `url(${backgroundImageUrl})`,
@@ -25,55 +24,23 @@ export default function Signup({ onToggleForm }) {
     backgroundPosition: 'center',
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  const serviceRegistrtion = async (e) => {
+    e.preventDefault();
+    const isSuccess = await postRegistrtion(
+        {
+            full_name,
+            phone_number,
+            email,
+            password
+        }
+    )
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleRepasswordChange = (e) => {
-    setRepassword(e.target.value);
-  };
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handleNumberChange = (e) => {
-    setNumber(e.target.value);
-  };
-
-  const handleSignUp = async () => {
-    try {
-      // Add your logic to handle sign-up using email and password
-      console.log('Email:', email);
-      console.log('Password:', password);
-      console.log('Repassword:', repassword);
-      console.log('Username:', username);
-      console.log('Phone Number:', number);
-
-      // Call the registration API
-      const registrationResponse = await postRegistration({
-        name: '', // Add name if applicable
-        email,
-        password,
-        confirmationPassword: repassword,
-        username,
-        number,
-      });
-      console.log('Registration Response:', registrationResponse);
-
-      // Redirect to login after successful registration
-      if (registrationResponse.success) {
-        onToggleForm(); // Switch to the login form
-      }
-    } catch (error) {
-      console.error('Error during registration:', error);
-      // Handle registration error, show a message, or take appropriate action
+    if (isSuccess && isSuccess.status === 'success') {
+        alert(isSuccess.message);
+        onToggleForm();
     }
-  };
+
+  }
 
   return (
     <main className="flex flex-col items-center justify-center w-full flex-1 px-4 md:px-10 lg:px-20 text-center">
@@ -97,17 +64,20 @@ export default function Signup({ onToggleForm }) {
               </a>
             </div>
             <p className="text-black my-2 lg:my-3 text-black">Or use your email accounts</p>
+            <form onSubmit={serviceRegistrtion} className="text-black my-2 lg:my-3">
             <div className="flex flex-col items-center">
               <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
                 <FaRegUser className="text-gray-400 m-2" />
                 <input
                   required
                   type="text"
-                  name="username"
-                  placeholder="Username"
+                  name="fullname"
+                  placeholder="Full Name"
                   className="bg-gray-100 outline-none text-sm flex-1"
-                  value={username}
-                  onChange={handleUsernameChange}
+                  value={full_name}
+              onChange={(e) => {
+                setFull_name(e.target.value);
+              }}
                 />
               </div>
 
@@ -119,8 +89,10 @@ export default function Signup({ onToggleForm }) {
                   name="phonenumber"
                   placeholder="Phone Number"
                   className="bg-gray-100 outline-none text-sm flex-1"
-                  value={number}
-                  onChange={handleNumberChange}
+                  value={phone_number}
+              onChange={(e) => {
+                setPhone_number(e.target.value);
+              }}
                 />
               </div>
 
@@ -133,7 +105,9 @@ export default function Signup({ onToggleForm }) {
                   placeholder="Email"
                   className="bg-gray-100 outline-none text-sm flex-1"
                   value={email}
-                  onChange={handleEmailChange}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
                 />
               </div>
 
@@ -146,7 +120,9 @@ export default function Signup({ onToggleForm }) {
                   placeholder="Password"
                   className="bg-gray-100 outline-none text-sm flex-1"
                   value={password}
-                  onChange={handlePasswordChange}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
                 />
               </div>
       
@@ -156,14 +132,15 @@ export default function Signup({ onToggleForm }) {
                 </label>
                 <a href="#" className="text-xs">Forgot Password?</a>
               </div>
-              <a
+              <button
                 href="#"
                 className="border-2 border-green text-white rounded-full px-8 py-2 inline-block font-semibold hover:bg-purple-600 hover:text-white"
-                onClick={handleSignUp}
+                type="submit"
               >
                 Sign up
-              </a>
+              </button>
             </div>
+            </form>
           </div>
         </div>
         <div className="w-full lg:w-2/5 bg-green-500 text-white rounded-br-2xl lg:rounded-tr-2xl py-12 lg:py-36 px-6 lg:px-12" style={notAMemberSectionStyle}>
