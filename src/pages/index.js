@@ -1,3 +1,5 @@
+// pages/index.js
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import SignIn from '@/components/Form';
@@ -6,21 +8,19 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(true);
-  const [userIsLoggedIn, setUserIsLoggedIn] = useState(false); // Add this line
+  const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
   const router = useRouter();
 
   const handleToggleForm = async () => {
-    setShowSignIn((prev) => !prev);
-
-    // Assuming you are using some state to determine the login status
-    if (!showSignIn && userIsLoggedIn) {
-      // Redirect to the Dashboard page
-      router.push('/main');
+    if (userIsLoggedIn && showSignIn) {
+      router.push('/');
+    } else {
+      setShowSignIn((prev) => !prev);
     }
   };
 
   return (
-    <div>
+    <div className={`home-background `}>
       <Header />
       {showSignIn ? (
         <SignIn onToggleForm={handleToggleForm} setUserIsLoggedIn={setUserIsLoggedIn} />

@@ -45,17 +45,21 @@ export default function Form({ onToggleForm }) {
         
         
         alert("LOGIN BERHASIL !!!");
-        router.reload("/main");
+        router.reload("/");
     }
 
   }
 
   useEffect(() => {
-    const userData = getCookie("userData")
-    if(userData) {
-        router.push("/main");
+    const userData = getCookie("userData");
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      if (parsedUserData && parsedUserData.token) {
+        router.push("/");
+      }
     }
-  },[])
+  }, []);
+  
 
 
   return (

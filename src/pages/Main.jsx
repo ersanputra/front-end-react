@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import HeadlineCards from "@/components/HeadlineCards";
+import Food from "@/components/Food";
 
-const Main = () => {
+
+export default function Main() {
+
+
   return (
     <div>
-      <h1>Welcome to the Dashboard!</h1>
+      <Navbar />
+      <Hero />
+      <HeadlineCards />
+      <Food  />
+     
     </div>
   );
-};
-
-export default Main;
+}
