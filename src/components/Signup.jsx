@@ -11,6 +11,53 @@ export default function Signup({ onToggleForm }) {
   const [password, setPassword] = useState('');
   const [full_name, setFull_name] = useState('');
   const [phone_number, setPhone_number] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [imageUploadUrl, setImageUploadUrl] = useState(null);
+  
+  const handleImageUpload = async (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      // Replace 'your-api-endpoint' with the actual API endpoint
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/api/upload/profile`, {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+
+      // Assuming the API returns the URL of the uploaded image
+      if (result.imageUrl) {
+        setImageUploadUrl(result.imageUrl);
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     handleImageUpload(file);
+  //   }
+  // };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImage(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreviewUrl(null);
+    }
+  };
 
   const notAMemberSectionStyle = {
     backgroundImage: `url(${backgroundImageUrl})`,
@@ -24,24 +71,36 @@ export default function Signup({ onToggleForm }) {
     backgroundPosition: 'center',
   };
 
+
+
+
   const serviceRegistrtion = async (e) => {
-    e.preventDefault();
-    const isSuccess = await postRegistrtion(
-        {
-            full_name,
-            phone_number,
-            email,
-            password
-        }
-    )
-
-    if (isSuccess && isSuccess.status === 'success') {
-        alert(isSuccess.message);
-        onToggleForm();
+      e.preventDefault();
+  
+      // First, upload the image
+      if (profileImage) {
+        await handleImageUpload(profileImage);
     }
+  
+      // Then, register the user with the image URL
+      const registrationData = {
+        full_name,
+        phone_number,
+        email,
+        password,
+        imageUrl: imageUploadUrl // Make sure this matches the backend's expected field name
+    };
 
-  }
-
+    const isSuccess = await postRegistrtion(registrationData);
+  
+      if (isSuccess && isSuccess.status === 'success') {
+          alert(isSuccess.message);
+          onToggleForm();
+      }
+  };
+  
+  // Update this function to set the image URL
+ 
   return (
     <main className="flex flex-col items-center justify-center w-full flex-1 px-4 md:px-10 lg:px-20 text-center">
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col lg:flex-row w-full max-w-4xl">
@@ -125,6 +184,24 @@ export default function Signup({ onToggleForm }) {
               }}
                 />
               </div>
+
+       
+
+              <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
+        <input
+          type="file"
+          name="profile_image"
+          onChange={handleImageChange}
+          className="bg-gray-100 outline-none text-sm flex-1"
+        />
+      </div>
+
+             {/* Image preview section */}
+             {imagePreviewUrl && (
+        <div className="mb-3">
+          <img src={imagePreviewUrl} alt="Profile Preview" className="w-20 h-20 object-cover rounded-full" />
+        </div>
+      )}
       
               <div className="flex justify-between w-full lg:w-64 mb-5">
                 <label className="flex items-center text-xs">

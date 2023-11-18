@@ -23,14 +23,15 @@ export const postLogin = async ({
 }
 
 export const postRegistrtion = async ({
-  full_name, phone_number, email, password
+  full_name, phone_number, email, password, imageUrl
 }) => {
   try {
       const response = await api.post('/api/users/register', {
         full_name,
         phone_number,
         email,
-        password
+        password,
+        profile_image: imageUrl
       });
       return response.data;
   } catch (error) {
@@ -39,3 +40,4 @@ export const postRegistrtion = async ({
       }
   }
 }
+
