@@ -115,7 +115,7 @@ export default function Signup({ onToggleForm }) {
                 <MdOutlineSmartphone className="text-gray-400 m-2" />
                 <input
                   required
-                  type="number"
+                  type="text"
                   name="phonenumber"
                   placeholder="Phone Number"
                   className="bg-gray-100 outline-none text-sm flex-1"
