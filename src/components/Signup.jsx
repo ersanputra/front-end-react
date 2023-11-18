@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FaFacebookF, FaInstagram, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
-import { MdLockOutline } from 'react-icons/md';
+import { FaFacebookF, FaInstagram, FaGoogle, FaRegEnvelope, FaRegUser } from 'react-icons/fa';
+import { MdLockOutline, MdOutlineSmartphone } from 'react-icons/md';
 import { postRegistration } from '@/rest/api'; // Assuming postRegistration is the correct function name
 
 const signInBackgroundImageUrl = 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8fDA%3D';
@@ -10,6 +10,8 @@ export default function Signup({ onToggleForm }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repassword, setRepassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [number, setNumber] = useState('');
 
   const notAMemberSectionStyle = {
     backgroundImage: `url(${backgroundImageUrl})`,
@@ -35,12 +37,22 @@ export default function Signup({ onToggleForm }) {
     setRepassword(e.target.value);
   };
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleNumberChange = (e) => {
+    setNumber(e.target.value);
+  };
+
   const handleSignUp = async () => {
     try {
       // Add your logic to handle sign-up using email and password
       console.log('Email:', email);
       console.log('Password:', password);
       console.log('Repassword:', repassword);
+      console.log('Username:', username);
+      console.log('Phone Number:', number);
 
       // Call the registration API
       const registrationResponse = await postRegistration({
@@ -48,6 +60,8 @@ export default function Signup({ onToggleForm }) {
         email,
         password,
         confirmationPassword: repassword,
+        username,
+        number,
       });
       console.log('Registration Response:', registrationResponse);
 
@@ -57,7 +71,7 @@ export default function Signup({ onToggleForm }) {
       }
     } catch (error) {
       console.error('Error during registration:', error);
-      // Handle registration error, show a message or take appropriate action
+      // Handle registration error, show a message, or take appropriate action
     }
   };
 
@@ -69,7 +83,7 @@ export default function Signup({ onToggleForm }) {
             DevviCake
           </div>
           <div className="py-8 lg:py-10">
-            <h2 className="text-2xl lg:text-3xl font-bold text-purple-500 mb-2">Sign in to Account</h2>
+            <h2 className="text-2xl lg:text-3xl font-bold text-purple-500 mb-2">Sign Up Your Account</h2>
             <div className="border-2 w-8 lg:w-10 border-purple-500 inline-block mb-2"></div>
             <div className="flex justify-center my-4 lg:my-6">
               <a href="#" className="border-2 border-gray-200 rounded-full p-2 mx-1">
@@ -85,6 +99,32 @@ export default function Signup({ onToggleForm }) {
             <p className="text-black my-2 lg:my-3 text-black">Or use your email accounts</p>
             <div className="flex flex-col items-center">
               <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
+                <FaRegUser className="text-gray-400 m-2" />
+                <input
+                  required
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  className="bg-gray-100 outline-none text-sm flex-1"
+                  value={username}
+                  onChange={handleUsernameChange}
+                />
+              </div>
+
+              <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
+                <MdOutlineSmartphone className="text-gray-400 m-2" />
+                <input
+                  required
+                  type="number"
+                  name="phonenumber"
+                  placeholder="Phone Number"
+                  className="bg-gray-100 outline-none text-sm flex-1"
+                  value={number}
+                  onChange={handleNumberChange}
+                />
+              </div>
+
+              <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
                 <FaRegEnvelope className="text-gray-400 m-2" />
                 <input
                   required
@@ -96,6 +136,7 @@ export default function Signup({ onToggleForm }) {
                   onChange={handleEmailChange}
                 />
               </div>
+
               <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
                 <MdLockOutline className="text-gray-400 m-2" />
                 <input
@@ -108,18 +149,7 @@ export default function Signup({ onToggleForm }) {
                   onChange={handlePasswordChange}
                 />
               </div>
-              <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
-                <MdLockOutline className="text-gray-400 m-2" />
-                <input
-                  required
-                  type="password"
-                  name="repassword"
-                  placeholder="Repassword"
-                  className="bg-gray-100 outline-none text-sm flex-1"
-                  value={repassword}
-                  onChange={handleRepasswordChange}
-                />
-              </div>
+      
               <div className="flex justify-between w-full lg:w-64 mb-5">
                 <label className="flex items-center text-xs">
                   <input type="checkbox" name="remember" className="mr-1" />Remember Me
