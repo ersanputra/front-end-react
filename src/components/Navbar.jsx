@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { AiOutlineMenu, AiOutlineSearch, AiOutlineClose, AiFillTag } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
 import { BsFillCartFill, BsFillSaveFill } from 'react-icons/bs';
 import { TbTruckDelivery } from 'react-icons/tb';
-import { FaUserFriends, FaWallet } from 'react-icons/fa';
-import { MdFavorite, MdHelp } from 'react-icons/md';
+import {  FaWallet } from 'react-icons/fa';
+import { MdFavorite, MdHistory } from 'react-icons/md';
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -85,18 +85,9 @@ const Navbar = () => {
             <li className='text-xl py-4 flex'>
               <FaWallet size={25} className='mr-4' /> Wallet
             </li>
-            <li className='text-xl py-4 flex'>
-              <MdHelp size={25} className='mr-4' /> Help
-            </li>
-            <li className='text-xl py-4 flex'>
-              <AiFillTag size={25} className='mr-4' /> Promotions
-            </li>
-            <li className='text-xl py-4 flex'>
-              <BsFillSaveFill size={25} className='mr-4' /> Best Ones
-            </li>
-            <li className='text-xl py-4 flex'>
-              <FaUserFriends size={25} className='mr-4' /> Invite Friends
-            </li>
+        <li className='text-xl py-4 flex'>
+          <MdHistory size={25} className='mr-4' />  History
+        </li>
           </ul>
         </nav>
       </div>
