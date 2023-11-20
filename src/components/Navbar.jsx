@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { AiOutlineMenu, AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
-import { BsFillCartFill, BsFillSaveFill } from 'react-icons/bs';
+import { BsFillCartFill } from 'react-icons/bs';
 import { TbTruckDelivery } from 'react-icons/tb';
-import {  FaWallet } from 'react-icons/fa';
-import { MdFavorite, MdHistory } from 'react-icons/md';
+import { FaWallet } from 'react-icons/fa';
+import { MdFavorite, MdHistory, MdHome } from 'react-icons/md';
+import Cart from '@/components/ShoppingCart';
 
-const Navbar = () => {
+
+const Navbar = ({ toggleCart }) => {
   const [nav, setNav] = useState(false);
 
   return (
@@ -45,19 +48,25 @@ const Navbar = () => {
       </div>
 
       {/* Cart button for both desktop and mobile views */}
-      <button className='bg-black text-white md:hidden flex items-center py-2 px-4 rounded-full'>
+      <button
+        onClick={() => {
+          toggleCart();
+        }}
+        className='bg-black text-white md:hidden flex items-center py-2 px-4 rounded-full'
+      >
         <BsFillCartFill size={20} className='mr-2' /> Cart
       </button>
-      <button className='bg-black text-white hidden md:flex items-center py-2 px-4 rounded-full'>
+      <button
+        onClick={() => {
+          toggleCart();
+        }}
+        className='bg-black text-white hidden md:flex items-center py-2 px-4 rounded-full'
+      >
         <BsFillCartFill size={20} className='mr-2' /> Cart
       </button>
 
       {/* Mobile Menu Overlay */}
-      {nav ? (
-        <div className='bg-black/80 fixed w-full h-screen z-10 top-0 left-0'></div>
-      ) : (
-        ''
-      )}
+      {nav ? <div className='bg-black/80 fixed w-full h-screen z-10 top-0 left-0'></div> : ''}
 
       {/* Side drawer menu */}
       <div
@@ -65,7 +74,8 @@ const Navbar = () => {
           nav
             ? 'fixed top-0 left-0 w-[300px] h-screen bg-white z-10 duration-300'
             : 'fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300'
-        }>
+        }
+      >
         <AiOutlineClose
           onClick={() => setNav(!nav)}
           size={30}
@@ -77,17 +87,40 @@ const Navbar = () => {
         <nav>
           <ul className='flex flex-col p-4 text-gray-800'>
             <li className='text-xl py-4 flex'>
-              <TbTruckDelivery size={25} className='mr-4' /> Orders
+              <Link href="/Main">
+              
+                  <MdHome size={25} className='mr-4' /> Home
+                
+              </Link>
             </li>
             <li className='text-xl py-4 flex'>
-              <MdFavorite size={25} className='mr-4' /> Favorites
+              <Link href="/orders">
+              
+                  <TbTruckDelivery size={25} className='mr-4' /> Orders
+                
+              </Link>
             </li>
             <li className='text-xl py-4 flex'>
-              <FaWallet size={25} className='mr-4' /> Wallet
+              <Link href="/favorites">
+              
+                  <MdFavorite size={25} className='mr-4' /> Favorites
+                
+              </Link>
             </li>
-        <li className='text-xl py-4 flex'>
-          <MdHistory size={25} className='mr-4' />  History
-        </li>
+            <li className='text-xl py-4 flex'>
+              <Link href="/wallet">
+              
+                  <FaWallet size={25} className='mr-4' /> Wallet
+                
+              </Link>
+            </li>
+            <li className='text-xl py-4 flex'>
+              <Link href="/history">
+              
+                  <MdHistory size={25} className='mr-4' /> History
+                
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

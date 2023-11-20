@@ -6,15 +6,16 @@ import Food from "@/components/Food";
 
 
 export default function Main() {
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
     <div>
       <Navbar />
       <Hero />
       <HeadlineCards />
-      <Food  />
-     
+      <Food />
+
+      
     </div>
   );
 }

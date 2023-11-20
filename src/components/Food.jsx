@@ -36,25 +36,25 @@ const Food = () => {
           <div className='flex justfiy-between flex-wrap'>
             <button
               onClick={() => setFoods(data)}
-              className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
+              className='m-1 border-orange-600 text-black font-bold  hover:bg-orange-600 hover:text-white  border border-white rounded-xl px-5 py-1'
             >
               All
             </button>
             <button
               onClick={() => filterType('cakes')}
-              className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
+              className='m-1 border-orange-600 text-black font-bold  hover:bg-orange-600 hover:text-white border border-white rounded-xl px-5 py-1'
             >
             Cakes
             </button>
             <button
               onClick={() => filterType('pastry')}
-              className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
+              className='m-1 border-orange-600 text-black font-bold  hover:bg-orange-600 hover:text-white border border-white rounded-xl px-5 py-1'
             >
               Pastry
             </button>
             <button
               onClick={() => filterType('bakery')}
-              className='m-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white'
+              className='m-1 border-orange-600 text-black font-bold  hover:bg-orange-600 hover:text-white border border-white rounded-xl px-5 py-1'
             >
                 Bakery
             </button>

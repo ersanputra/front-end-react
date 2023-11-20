@@ -1,6 +1,6 @@
 // pages/index.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import SignIn from '@/components/Form';
 import Signup from '@/components/Signup';
@@ -20,7 +20,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`home-background `}>
+    <div style={{ backgroundColor: '#ffd700', height: '1280px', width: '1920px' }}>
       <Header />
       {showSignIn ? (
         <SignIn onToggleForm={handleToggleForm} setUserIsLoggedIn={setUserIsLoggedIn} />
