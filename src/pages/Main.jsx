@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import HeadlineCards from "@/components/HeadlineCards";
 import Food from "@/components/Food";
+import DataForm from "@/components/DataForm";
 
 
 export default function Main() {
@@ -14,7 +15,7 @@ export default function Main() {
       <Hero />
       <HeadlineCards />
       <Food />
-
+<DataForm/>
       
     </div>
   );
