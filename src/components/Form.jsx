@@ -55,7 +55,7 @@ export default function Form({ onToggleForm }) {
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       if (parsedUserData && parsedUserData.token) {
-        router.push("/");
+        router.push("/main");
       }
     }
   }, []);

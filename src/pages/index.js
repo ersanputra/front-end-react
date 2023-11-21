@@ -13,14 +13,14 @@ export default function Home() {
 
   const handleToggleForm = async () => {
     if (userIsLoggedIn && showSignIn) {
-      router.push('/');
+      router.push('/main');
     } else {
       setShowSignIn((prev) => !prev);
     }
   };
 
   return (
-    <div style={{ backgroundColor: '#ffd700', height: '1280px', width: '1920px' }}>
+    <div>
       <Header />
       {showSignIn ? (
         <SignIn onToggleForm={handleToggleForm} setUserIsLoggedIn={setUserIsLoggedIn} />
