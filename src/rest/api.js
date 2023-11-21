@@ -49,3 +49,20 @@ export const getCakes = async () => {
         throw error;
     }
 }
+
+
+export const postCartItem = async ({ userId, cakeId, quantity }) => {
+    try {
+        const response = await api.post('/api/cartitems', {
+          userId,
+          cakeId,
+          quantity
+        });
+        return response.data;
+    } catch (error) {
+        if (error) {
+            alert(error.response.data.message);            
+        }
+    }
+  }
+  

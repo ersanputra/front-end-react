@@ -1,8 +1,10 @@
 // components/ProductDetail.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { HiOutlineArrowCircleRight } from 'react-icons/hi';
+import { postCartItem } from '@/rest/api'; 
 
 export default function ProductDetail({ product }) {
+  const [quantity, setQuantity] = useState(1);
 
   const formatRupiah = (number) => {
     const parts = number.toFixed(0).toString().split('.');
@@ -10,6 +12,21 @@ export default function ProductDetail({ product }) {
     return `Rp. ${parts.join('.')}`;
   };
 
+  const handleQuantityChange = (event) => {
+    setQuantity(parseInt(event.target.value));
+  };
+
+  const addToCart = async () => {
+    try {
+      // Asumsi Anda memiliki cara untuk mendapatkan cartId, misalnya dari user context
+      const userId = 3; // Contoh sementara
+      await postCartItem({ userId, cakeId: product.cake_id, quantity });
+      alert('Produk ditambahkan ke keranjang');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Gagal menambahkan ke keranjang');
+    }
+  };
   
   return (
     <div>
@@ -51,6 +68,8 @@ export default function ProductDetail({ product }) {
                       className="border border-gray-300 text-sm font-semibold mb-1 max-w-full w-full outline-none rounded-md m-0 py-3 px-4 md:py-3 md:px-4 md:mb-0 focus:border-red-500"
                       type="number"
                       defaultValue="1"
+                      value={quantity}
+                      onChange={handleQuantityChange}
                       required
                     />
                   </div>
@@ -59,6 +78,8 @@ export default function ProductDetail({ product }) {
                     <button
                       className="flex justify-center items-center gap-2 w-full py-3 px-4 bg-red-500 text-white text-md font-bold border border-red-500 rounded-md ease-in-out duration-150 shadow-slate-600 hover:bg-white hover:text-red-500 lg:m-0 md:px-6"
                       title="Confirm Order"
+                      onClick={addToCart}
+
                     >
                       <span>Add to Cart</span>
                       <HiOutlineArrowCircleRight />
