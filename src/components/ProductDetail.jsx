@@ -3,6 +3,14 @@ import React from 'react';
 import { HiOutlineArrowCircleRight } from 'react-icons/hi';
 
 export default function ProductDetail({ product }) {
+
+  const formatRupiah = (number) => {
+    const parts = number.toFixed(0).toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return `Rp. ${parts.join('.')}`;
+  };
+
+  
   return (
     <div>
       <div className="p-3 max-w-7xl m-auto">
