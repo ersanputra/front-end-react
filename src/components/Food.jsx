@@ -4,10 +4,12 @@ import ProductDetail from './ProductDetail';
 import { getCakes } from '@/rest/api';
 import { HiOutlineArrowCircleRight } from 'react-icons/hi';
 
+
 const Food = () => {
   const [foods, setFoods] = useState([]);
   const [allFoods, setAllFoods] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  
 
   useEffect(() => {
     const fetchData = async () => {

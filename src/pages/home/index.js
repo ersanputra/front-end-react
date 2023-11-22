@@ -1,15 +1,31 @@
 // pages/home/index.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import HeadlineCards from '@/components/HeadlineCards';
 import Food from '@/components/Food';
 import ShoppingCart from '@/components/ShoppingCart';
+import { getCookie, setCookie } from "@/utils/cookies";
+import { useRouter } from 'next/router';
+
 
 export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cart, setCart] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Add this line
+
+
+  const router = useRouter();
+  useEffect(() => {
+    const userData = getCookie("userData");
+    if (userData) {
+      setIsAuthenticated(true); // Set to true if user data exists
+    } else {
+      router.push("/"); // Redirect if not authenticated
+    }
+  }, [router]);
+  
 
   const addToCart = (product) => {
 
@@ -33,12 +49,12 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar toggleCart={() => setIsCartOpen(!isCartOpen)} />
-      <Hero />
-      <HeadlineCards />
-      <Food addToCart={addToCart} />
+      {isAuthenticated && ( <Navbar toggleCart={() => setIsCartOpen(!isCartOpen)} /> )}
+      {isAuthenticated && ( <Hero />)}
+      {isAuthenticated && ( <HeadlineCards />)}
+      {isAuthenticated && ( <Food addToCart={addToCart} /> )}
 
-      {isCartOpen && (
+      {isCartOpen && isAuthenticated && (
         <ShoppingCart
           updateCartItemCount={updateCartItemCount}
           data={cart}
