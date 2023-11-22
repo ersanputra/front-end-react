@@ -9,6 +9,9 @@ const ShoppingCart = ({ updateCartItemCount, data }) => {
   const [cartProducts, setCartProducts] = useState(data);
 
   useEffect(() => {
+
+    setCartProducts("");
+
     updateCartItemCount(cartProducts.length);
     // Clean-up function
     return () => {
@@ -151,7 +154,39 @@ const ShoppingCart = ({ updateCartItemCount, data }) => {
                       <div className="mt-8">
                         <div className="flow-root">
                           <ul role="list" className="-my-6 divide-y divide-gray-200">
-                            {renderCartItems()}
+                          <li className="flex py-6">
+                              <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                <img
+                                  src="https://th.bing.com/th/id/OIP.a2rdLF3EU5T9FnKf_UfrAQHaKT?pid=ImgDet&rs=1"
+                                  alt="Mille Crepes with Strawberry flavour"
+                                  className="h-full w-full object-cover object-center"
+                                />
+                              </div>
+
+                              <div className="ml-4 flex flex-1 flex-col">
+                              <div>
+                                <div className="flex justify-between text-base font-medium text-gray-900">
+                                  <h3>
+                                    <a href="#">Strawberry Mille Crepes</a>
+                                  </h3>
+                                  <p className="ml-4">$90.00</p>        
+                                </div>
+                                <p className="mt-1 text-sm text-gray-500">Salmon</p>
+                              </div>
+                              <div className="flex flex-1 items-end justify-between text-sm">
+                                <div className="flex items-center">
+                                  <button className="text-gray-500 hover:text-gray-700">-</button>
+                                  <input 
+                                    type="number" 
+                                    className="mx-2 border text-center w-12"
+                                    defaultValue={1} 
+                                    min={1} 
+                                  />
+                                  <button className="text-gray-500 hover:text-gray-700">+</button>
+                                </div>
+                              </div>
+                            </div>
+                            </li>
                           </ul>
                         </div>
                       </div>
