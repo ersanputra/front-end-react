@@ -66,3 +66,35 @@ export const postCartItem = async ({ userId, cakeId, quantity }) => {
     }
   }
   
+  export const getCart = async () => {
+    try {
+        const response = await api.get('/api/cartitems/list/3');
+        return response.data.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deleteCartItem = async ({ cart_item_id }) => {
+    try {
+        const response = await api.delete('/api/cartitems/' + cart_item_id);
+        return response.data;
+    } catch (error) {
+        if (error) {
+            alert(error.response.data.message);            
+        }
+    }
+  }
+
+  export const updateCartQuantity = async ({ cart_item_id, quantity }) => {
+    try {
+        const response = await api.put('/api/cartitems/'+ cart_item_id +'/quantity', {
+          quantity
+        });
+        return response.data;
+    } catch (error) {
+        if (error) {
+            alert(error.response.data.message);            
+        }
+    }
+  }
