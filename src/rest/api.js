@@ -5,7 +5,15 @@ const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
 })
 
-const userData = JSON.parse(getCookie("userData"));
+
+let userData;
+
+
+  const userDataString = getCookie("userData");
+
+  if (userDataString) {
+    userData = JSON.parse(userDataString);
+  } 
 
 export const postLogin = async ({
      email, password

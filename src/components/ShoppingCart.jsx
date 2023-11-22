@@ -3,8 +3,9 @@
 import { Fragment, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { data } from '@/data/cart';
 import { getCart, deleteCartItem, updateCartQuantity } from '@/rest/api';
+import Link from 'next/link';
+
 
 const ShoppingCart = ({ updateCartItemCount, data }) => {
   const [open, setOpen] = useState(true);
@@ -209,7 +210,7 @@ const ShoppingCart = ({ updateCartItemCount, data }) => {
                       </p>
                       <div className="mt-6">
                         <a
-                          href="#"
+                           href="/checkout"
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                           Checkout
