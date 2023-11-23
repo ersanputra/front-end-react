@@ -108,3 +108,34 @@ export const deleteCartItem = async ({ cart_item_id }) => {
         }
     }
   }
+
+  export const postCheckout = async ({
+    recipient_name, phone_number, address,address_id, tanggal, waktu, paymentMethod
+  }) => {
+    try {
+        const response = await api.post('/api/checkout', {
+          user_id: userData.user_id,
+          recipient_name,
+          phone_number,
+          address,
+          address_id,
+          tanggal,
+          waktu,
+          paymentMethod
+        });
+        return response.data;
+    } catch (error) {
+        if (error) {
+            alert(error.response.data.message);            
+        }
+    }
+  }
+
+  export const getOrderByIdUser = async () => {
+    try {
+        const response = await api.get('/api/orders/user/' + userData.user_id);
+        return response.data.data;
+    } catch (error) {
+        throw error;
+    }
+}
