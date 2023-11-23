@@ -1,6 +1,6 @@
 import { useState, useEffect  } from 'react';
 import { getOrderByIdUser } from '@/rest/api';
-
+import Link from 'next/link';
 
 const History = () => {
   const [orderLists, setOrderlists] = useState([]);
@@ -130,12 +130,11 @@ const History = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">Total Price: {formatRupiah(order.total_price)}</span>
                   {/* Button to view order details, placed on the right */}
-                  <button 
-                    onClick={() => {/* function to handle detail view */}}
-                    className="text-white bg-blue-500 hover:bg-blue-700 font-semibold py-2 px-4 rounded"
-                  >
-                    Lihat Detail
-                  </button>
+                  <Link href={`/invoice/${order.order_id}`} passHref>
+                    <button className="text-white bg-blue-500 hover:bg-blue-700 font-semibold py-2 px-4 rounded">
+                      Lihat Detail
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}

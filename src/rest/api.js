@@ -147,3 +147,11 @@ export const getAddress = async () => {
         throw error;
     }
 }
+export const getOrderByIdOrder = async (order_id) => {
+    try {
+        const response = await api.get('/api/orders/' + order_id);
+        return response.data.data;
+    } catch (error) {
+        throw error;
+    }
+}
