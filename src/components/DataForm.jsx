@@ -1,16 +1,17 @@
 import Head from 'next/head';
-import { getCart, postCheckout } from '@/rest/api';
+import { getCart, postCheckout, getAddress } from '@/rest/api';
 import { useState, useEffect, useRef  } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Checkout = () => {
   const [cartProducts, setCartProducts] = useState("");
+  const [address, setAddress] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const formRef = useRef(null);
+  const router = useRouter();
 
-  const dataAlamat = [
-    //{ address_id: 1, recipient_name: "Asep Sunandar", address: "Jalan Merdeka No. 123, Bandung", phone_number: "08123456789" },
-  { address_id:2,recipient_name: "Rina Kumala", address: "Jalan Sudirman No. 45, Jakarta", phone_number: "08234567890" }
-  ];
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +30,25 @@ const Checkout = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const addressData = await getAddress();
+        if (Array.isArray(addressData)) {
+          setAddress(addressData);
+        } else {
+          console.error('Address data is not an array:', addressData);
+          setAddress([addressData]); // Mengubah data menjadi array
+        }
+      } catch (error) {
+        console.error('Failed to fetch address:', error);
+        setAddress([]); 
+      }
+    };
+    fetchData();
+  }, []);
+
 
   useEffect(() => {
     if (Array.isArray(cartProducts)) {
@@ -60,28 +80,22 @@ const Checkout = () => {
         const formData = new FormData(formRef.current);
         const data = Object.fromEntries(formData.entries());
 
-        console.log(data); // For debugging
+        //console.log(data); // For debugging
         try {
           // Call your API or handle the form data
           await postCheckout(data);
+          
+          router.push("/history");
         } catch (error) {
           console.error('Error in form submission:', error);
         }
       }
 
-      
-
-      // try {
-      //   // Call your API or handle the form data
-      //   await postCheckout(data);
-      // } catch (error) {
-      //   console.error('Error in form submission:', error);
-      // }
     }
   };
 
   function AlamatSection({ dataAlamat }) {
-    if (!dataAlamat || dataAlamat.length === 0) {
+    if (!address || address.length === 0) {
       return (
         <div>
           <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
@@ -145,7 +159,7 @@ const Checkout = () => {
           Pilih Alamat
         </h2>
         <div className="bg-white shadow-lg rounded text-gray-600">
-          {dataAlamat.map((alamat, index) => (
+          {address.map((alamat, index) => (
             <label key={index} className="flex items-center border-b border-gray-200 py-2 cursor-pointer px-2">
               <input
                 type="radio"
@@ -226,7 +240,7 @@ const Checkout = () => {
           <div className="rounded-md">
           
           <section>
-            <AlamatSection dataAlamat={dataAlamat} />
+            <AlamatSection dataAlamat={address} />
           </section>
 
               <section>
