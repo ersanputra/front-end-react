@@ -19,8 +19,8 @@ export default function ProductDetail({ product }) {
   const addToCart = async () => {
     try {
       // Asumsi Anda memiliki cara untuk mendapatkan cartId, misalnya dari user context
-      const userId = 3; // Contoh sementara
-      await postCartItem({ userId, cakeId: product.cake_id, quantity });
+      
+      await postCartItem({  cakeId: product.cake_id, quantity });
       alert('Produk ditambahkan ke keranjang');
     } catch (error) {
       console.error('Error adding to cart:', error);

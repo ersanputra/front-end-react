@@ -2,6 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { useState, useEffect  } from 'react';
 
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
+})
+
+const ClientKey = process.env.NEXT_PUBLIC_CLIENT_KEY;
 
 function addHoursToDate(isoDateString, hoursToAdd) {
     // Parse the ISO date string into a Date object
@@ -37,7 +42,7 @@ function addHoursToDate(isoDateString, hoursToAdd) {
 
     const saveTokenToDatabase = async (paymentId,token) => {
       try {
-          const response = await axios.post('http://localhost:5000/api/token/', { paymentId, token });
+          const response = await api.post('/api/token', { paymentId, token });
           console.log('Token saved:', response.data);
       } catch (error) {
           console.error('Error saving token:', error);
@@ -48,7 +53,7 @@ function addHoursToDate(isoDateString, hoursToAdd) {
   const getToken = async () => {
       
       try {
-          const response = await axios.get('http://localhost:5000/api/token/' + order.order_id );
+          const response = await api.get('/api/token/' + order.order_id );
           setToken(response.data.data.token); // Menyimpan token ke state
           
       } catch (error) {
@@ -73,7 +78,7 @@ function addHoursToDate(isoDateString, hoursToAdd) {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/process-transaction', data, config);
+            const response = await api.post('/process-transaction', data, config);
             setToken(response.data.token)
 
             //save token
@@ -122,7 +127,7 @@ function addHoursToDate(isoDateString, hoursToAdd) {
         let scriptTag = document.createElement("script");
         scriptTag.src = midtransUrl
 
-        const midtransClientKey = "SB-Mid-client-LUFJFaJ8ratiC1KX";
+        const midtransClientKey = ClientKey;
         scriptTag.setAttribute("data-client-key", midtransClientKey)
 
         document.body.appendChild(scriptTag)
@@ -148,16 +153,14 @@ function addHoursToDate(isoDateString, hoursToAdd) {
   
             <div className="flex justify-between items-center mb-4">
             <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    order.status === 'Delivered' ? 'text-green-900 bg-green-200' :
-                    order.status === 'Shipped' ? 'text-blue-900 bg-blue-200' :
-                    order.status === 'InProcess' ? 'text-yellow-900 bg-yellow-200' :
-                    'text-red-900 bg-red-200' // Default style for 'Pending' or other statuses
-                }`}>
-                  {order.status === 'Pending' && 'Belum Bayar'}
-                  {order.status === 'InProcess' && 'Dalam Proses'}
-                  {order.status === 'Shipped' && 'Sedang Dikirim'}
-                  {order.status === 'Delivered' && 'Selesai'}
-                </span>
+                order.Payments[0]?.status === 'Completed' ? 'text-green-900 bg-green-200' :
+                order.Payments[0]?.status === 'Failed' ? 'text-red-900 bg-red-200' :
+                'text-yellow-900 bg-yellow-200' // Default style for 'Pending' or other statuses
+            }`}>
+                {order.Payments[0]?.status === 'Pending' && 'Belum Bayar'}
+                {order.Payments[0]?.status === 'Completed' && 'Sudah Bayar'}
+                {order.Payments[0]?.status === 'Failed' && 'Gagal'}
+            </span>
               <span className="text-sm text-gray-500">
                 {addHoursToDate(order.order_date, 0)}
               </span>
@@ -200,7 +203,7 @@ function addHoursToDate(isoDateString, hoursToAdd) {
                 Kue Untuk Tanggal: {addHoursToDate(order.order_date, 0)}
               </p>
               <p className="text-gray-900 text-lg">
-                Metode Pembayaran: {order.Payment?.payment_method || 'Tidak Tersedia'}
+                Metode Pembayaran: {order.Payments[0]?.payment_method || 'Tidak Tersedia'}
               </p>
             </div>
           </div>

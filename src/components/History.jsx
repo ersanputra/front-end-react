@@ -89,8 +89,10 @@ const History = () => {
               </tr>
             </thead>
             <tbody>
-            {orderLists.map((order, index) => (
-              <div key={order.order_id} className="bg-white rounded-lg shadow-md p-6 mb-4">
+            {orderLists
+              .sort((a, b) => b.order_id - a.order_id) // Mengurutkan orderLists berdasarkan order_id secara descending
+              .map((order, index) => (
+                <div key={order.order_id} className="bg-white rounded-lg shadow-md p-6 mb-4">
                 <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg text-gray-700 font-semibold">
                   Order #{index + 1}
@@ -99,15 +101,13 @@ const History = () => {
                 </div>
                 <div className="flex justify-between items-center mb-4">
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    order.status === 'Delivered' ? 'text-green-900 bg-green-200' :
-                    order.status === 'Shipped' ? 'text-blue-900 bg-blue-200' :
-                    order.status === 'InProcess' ? 'text-yellow-900 bg-yellow-200' :
-                    'text-red-900 bg-red-200' // Default style for 'Pending' or other statuses
-                }`}>
-                  {order.status === 'Pending' && 'Belum Bayar'}
-                  {order.status === 'InProcess' && 'Dalam Proses'}
-                  {order.status === 'Shipped' && 'Sedang Dikirim'}
-                  {order.status === 'Delivered' && 'Selesai'}
+                  order.Payments[0]?.status === 'Completed' ? 'text-green-900 bg-green-200' :
+                  order.Payments[0]?.status === 'Failed' ? 'text-red-900 bg-red-200' :
+                  'text-yellow-900 bg-yellow-200' // Default style for 'Pending' or other statuses
+                  }`}>
+                    {order.Payments[0]?.status === 'Pending' && 'Belum Bayar'}
+                    {order.Payments[0]?.status === 'Completed' && 'Sudah Bayar'}
+                    {order.Payments[0]?.status === 'Failed' && 'Gagal'}
                 </span>
                   <span className="text-sm text-gray-500">{addHoursToDate(order.order_date, 0)}</span>
                 </div>
@@ -137,8 +137,8 @@ const History = () => {
                   </Link>
                 </div>
               </div>
-            ))}
-
+              ))
+            }
             </tbody>
           </table>
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">

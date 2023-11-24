@@ -79,16 +79,36 @@ const Checkout = () => {
       } else {
         const formData = new FormData(formRef.current);
         const data = Object.fromEntries(formData.entries());
-
-        //console.log(data); // For debugging
-        try {
-          // Call your API or handle the form data
-          await postCheckout(data);
-          
-          router.push("/history");
-        } catch (error) {
-          console.error('Error in form submission:', error);
+        
+        if (!data.address_id && !data.recipient_name) {
+          alert('Silahkan isikan semua data.');
+          //console.log("Baik address_id dan recipient_name kosong.");
+        } else if (!data.address_id && data.recipient_name) {
+          try {
+            // Call your API or handle the form data
+            await postCheckout(data);
+            router.push("/history");
+          } catch (error) {
+            console.error('Error in form submission:', error);
+          }
+            // Jika address_id kosong tapi recipient_name ADA
+            //console.log("address_id kosong tetapi recipient_name ada.");
+        } else if (data.address_id && !data.recipient_name) {
+          try {
+            // Call your API or handle the form data
+            await postCheckout(data);
+            router.push("/history");
+          } catch (error) {
+            console.error('Error in form submission:', error);
+          }
+            // Jika address_id ADA tapi recipient_name kosong
+            //console.log("address_id ada tetapi recipient_name kosong.");
+        } else {
+            // Jika KEDUANYA ADA
+            //console.log("address_id dan recipient_name keduanya ada.");
         }
+        
+        
       }
 
     }
@@ -328,6 +348,7 @@ const Checkout = () => {
               ))
             )}
           </ul>
+        
           <div className="px-4 md:px-8 border-b">
             {/* Total */}
           </div>

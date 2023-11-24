@@ -61,10 +61,10 @@ export const getCakes = async () => {
 }
 
 
-export const postCartItem = async ({ userId, cakeId, quantity }) => {
+export const postCartItem = async ({ cakeId, quantity }) => {
     try {
         const response = await api.post('/api/cartitems', {
-          userId,
+          userId: userData.user_id,
           cakeId,
           quantity
         });
