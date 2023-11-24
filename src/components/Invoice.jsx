@@ -1,4 +1,7 @@
 import React from 'react';
+import axios from 'axios';
+import { useState, useEffect  } from 'react';
+
 
 function addHoursToDate(isoDateString, hoursToAdd) {
     // Parse the ISO date string into a Date object
@@ -23,7 +26,113 @@ function addHoursToDate(isoDateString, hoursToAdd) {
     return `Rp. ${parts.join('.')}`;
   };
 
+  
+
   const Invoice = ({ order }) => {
+    const [name, setName] = useState('');
+    const [order_id, setOrder_id] = useState('');
+    const [total, setTotal] = useState(0);
+
+    const [token, setToken] = useState('');
+
+    const saveTokenToDatabase = async (paymentId,token) => {
+      try {
+          const response = await axios.post('http://localhost:5000/api/token/', { paymentId, token });
+          console.log('Token saved:', response.data);
+      } catch (error) {
+          console.error('Error saving token:', error);
+      }
+  };
+
+
+  const getToken = async () => {
+      
+      try {
+          const response = await axios.get('http://localhost:5000/api/token/' + order.order_id );
+          setToken(response.data.data.token); // Menyimpan token ke state
+          
+      } catch (error) {
+          console.error('Error:', error);
+          process();
+      }
+  };
+    
+
+    const process = async () => {
+        //e.preventDefault(); // Mencegah reload halaman
+        const data = {
+            name: order.Address.recipient_name,
+            order_id: order.Payments[0].invoice,
+            total: order.total_price
+        };
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try {
+            const response = await axios.post('http://localhost:5000/process-transaction', data, config);
+            setToken(response.data.token)
+
+            //save token
+            saveTokenToDatabase(order.order_id,response.data.token)
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    useEffect(() => {
+        if(token) {
+          //lakukan save token ke database
+
+            window.snap.pay(token, {
+                onSuccess: (result) => {
+                    setToken("")
+                    window.location.href = "";
+                },
+                onPending: (result) => {
+                    setToken("")
+                    window.location.href = "";
+                },
+                onError: (error) => {
+                    console.log(error);
+                    setToken("")
+                    window.location.href = "";
+                },
+                onClose: () => {
+                    console.log("Anda belum menyelesaikan pembayaran");
+                    setToken("")
+                    
+                },
+            })
+
+            setName("")
+            setOrder_id("")
+            setTotal("")
+        }
+    }, [token]);
+
+  
+
+    useEffect(() => {
+        const midtransUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+
+        let scriptTag = document.createElement("script");
+        scriptTag.src = midtransUrl
+
+        const midtransClientKey = "SB-Mid-client-LUFJFaJ8ratiC1KX";
+        scriptTag.setAttribute("data-client-key", midtransClientKey)
+
+        document.body.appendChild(scriptTag)
+
+        return () => {
+            document.body.removeChild(scriptTag)
+        }
+    }, [])
+
+    
     return (
       <div className="bg-white rounded-md w-full">
         <div className="px-4 sm:px-8 md:px-16 lg:px-20 xl:px-32 py-4 overflow-x-auto">
@@ -98,13 +207,14 @@ function addHoursToDate(isoDateString, hoursToAdd) {
   
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
             <button 
-              onClick={() => {/* function to handle payment view */}}
+              onClick={getToken}
               className="text-white bg-blue-500 hover:bg-blue-700 font-semibold py-2 px-4 rounded"
             >
               Lakukan Pembayaran
             </button>
           </div>
         </div>
+        
       </div>
     );
   };
