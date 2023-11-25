@@ -276,6 +276,19 @@ const Checkout = () => {
             </label>
           ))}
         </div>
+        {showConfirmationModal && (
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-4 rounded shadow-md">
+              <p>Are you sure you want to delete this address?</p>
+              <div className="flex justify-end mt-4">
+                <button className="mr-2" onClick={handleConfirmationCancel}>
+                  Cancel
+                </button>
+                <button onClick={handleConfirmationConfirm}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        )}
         <a
           className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-black shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] border border-white hover:border-white"
           href="#"
@@ -328,23 +341,6 @@ const Checkout = () => {
           rel="stylesheet"
         />
       </Head>
-
-     {/* Confirmation Modal UI */}
-    {showConfirmationModal && (
-      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-4 rounded shadow-md">
-          <p>Are you sure you want to delete this address?</p>
-          <div className="flex justify-end mt-4">
-            <button className="mr-2" onClick={handleConfirmationCancel}>
-              Cancel
-            </button>
-            <button onClick={handleConfirmationConfirm}>Confirm</button>
-          </div>
-        </div>
-      </div>
-    )}
-
-
       <div className="h-screen grid grid-cols-3">
       
         <div className="lg:px-12 px-4 lg:col-span-2 col-span-3 bg-indigo-50 space-y-8">
@@ -370,22 +366,6 @@ const Checkout = () => {
             </div>
             <div className="text-sm tracking-wide text-gray-500 mt-4 sm:mt-0 sm:ml-4">
               Complete your orders and payment details below.
-            </div>
-            <div className="absolute sm:relative sm:top-auto sm:right-auto ml-auto right-4 top-4 text-gray-400 hover:text-gray-800 cursor-pointer">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
             </div>
           </div>
           <form id="checkoutForm" onSubmit={handleSubmit} ref={formRef}>
