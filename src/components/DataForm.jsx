@@ -4,17 +4,68 @@ import { useState, useEffect, useRef  } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+
+const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-4 rounded shadow-md">
+        <p>Are you sure you want to delete this address?</p>
+        <div className="flex justify-end mt-4">
+          <button className="mr-2" onClick={onClose}>
+            Cancel
+          </button>
+          <button onClick={onConfirm}>Confirm</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
 const Checkout = () => {
+  
+  
+  
+  
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [addressToRemove, setAddressToRemove] = useState(null);
   const [cartProducts, setCartProducts] = useState("");
   const [address, setAddress] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const formRef = useRef(null);
   const router = useRouter();
-
   const [isCollapsed, setIsCollapsed] = useState(true);
 
+  
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
+  };
+
+  const handleRemoveAddress = (addressId) => {
+    setAddressToRemove(addressId);
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmationCancel = () => {
+    setShowConfirmationModal(false);
+    setAddressToRemove(null);
+  };
+
+  const handleConfirmationConfirm = async () => {
+    setShowConfirmationModal(false);
+    if (addressToRemove) {
+      try {
+        const newAddressData = await getAddress();
+        setAddress(newAddressData);
+      } catch (error) {
+        console.error('Error removing address:', error);
+      } finally {
+        setAddressToRemove(null);
+      }
+    }
   };
 
   useEffect(() => {
@@ -275,7 +326,21 @@ const Checkout = () => {
         />
       </Head>
 
-     
+     {/* Confirmation Modal UI */}
+    {showConfirmationModal && (
+      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-4 rounded shadow-md">
+          <p>Are you sure you want to delete this address?</p>
+          <div className="flex justify-end mt-4">
+            <button className="mr-2" onClick={handleConfirmationCancel}>
+              Cancel
+            </button>
+            <button onClick={handleConfirmationConfirm}>Confirm</button>
+          </div>
+        </div>
+      </div>
+    )}
+
 
       <div className="h-screen grid grid-cols-3">
       
