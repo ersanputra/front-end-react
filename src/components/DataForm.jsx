@@ -39,7 +39,7 @@ const Checkout = () => {
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  
+  {/* Collapse dan Remove */}
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -67,6 +67,9 @@ const Checkout = () => {
       }
     }
   };
+{/* Batas Akhir*/}
+
+
 
   useEffect(() => {
     const fetchData = async () => {
