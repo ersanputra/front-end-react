@@ -3,6 +3,7 @@ import { getCart, postCheckout, getAddress } from '@/rest/api';
 import { useState, useEffect, useRef  } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
@@ -38,11 +39,16 @@ const Checkout = () => {
   const formRef = useRef(null);
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(true);
+  
 
   {/* Collapse dan Remove */}
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  const toggleCollapse = (addressId) => {
+    if (isCollapsed === addressId) {
+        setIsCollapsed(null); // Close the form if it's already open
+    } else {
+        setIsCollapsed(addressId); // Open the form for the clicked address
+    }
+};
 
   const handleRemoveAddress = (addressId) => {
     setAddressToRemove(addressId);
@@ -172,6 +178,48 @@ const Checkout = () => {
     }
   };
 
+  const handleSubmitAlamat = async (event) => {
+    event.preventDefault(); // Prevents the default form submit action (page reload)
+
+    // Construct the payload
+    const payload = {
+        recipient_name: alamat.recipient_name,
+        phone_number: alamat.phone_number,
+        address: alamat.address
+    };
+
+    // Implement your logic to send data to server
+    // For example, using fetch to send a POST request
+    try {
+        const response = await fetch('/your-api-endpoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Success:', data);
+        // Handle successful response
+    } catch (error) {
+        console.error('Error:', error);
+        // Handle errors
+    }
+};
+
+const handleInputChange = (event) => {
+  const { name, value } = event.target;
+  setAlamat(prevAlamat => ({
+      ...prevAlamat,
+      [name]: value
+  }));
+};
+
   function AlamatSection({ dataAlamat }) {
     if (!address || address.length === 0) {
       return (
@@ -237,45 +285,122 @@ const Checkout = () => {
           Pilih Alamat
         </h2>
         <div className="bg-white shadow-lg rounded text-gray-600 border-collapse">
-          {address.map((alamat, index) => (
-            <label key={index} className="flex items-center border-b border-gray-200 py-2 cursor-pointer px-2">
-              <input
-                type="radio"
-                name="address_id"
-                value={`${alamat.address_id}`}
-                className="mr-4"
-              />
-              <div className="flex items-center justify-between w-full">
-                <div>
-                  <span className="font-semibold">{alamat.recipient_name} ({alamat.phone_number})</span>
-                  <p className="text-gray-500">{alamat.address}</p>
-                </div>
-                <div>
-                  {/* X icon */}
-                  <span
-                    className="cursor-pointer text-gray-500 hover:text-red-500"
-                    onClick={() => handleRemoveAddress(alamat.address_id)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="h-5 w-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
+        <>
+            {address.map((alamat, index) => (
+                <React.Fragment key={index}>
+                    <label className="flex items-center border-b border-gray-200 py-2 cursor-pointer px-2">
+                        <input
+                          type="radio"
+                          name="address_id"
+                          value={`${alamat.address_id}`}
+                          className="mr-4"
                       />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
+                      <div className="flex items-center justify-between w-full">
+                          <div>
+                              <span className="font-semibold">{alamat.recipient_name} ({alamat.phone_number})</span>
+                              <p className="text-gray-500">{alamat.address}</p>
+                          </div>
+                          <div className="flex items-center">
+                              {/* Edit icon */}
+                              <span
+                                  className="cursor-pointer text-gray-500 hover:text-blue-500 mr-2"
+                                  onClick={() => toggleCollapse(alamat.address_id)}
+                              >
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                      className="h-5 w-5"
+                                  >
+                                      <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M15.232 2.232a1.5 1.5 0 012.121 0l4.646 4.646a1.5 1.5 0 010 2.121L10.343 20.557a2 2 0 01-.878.47l-4.495 1.125a1 1 0 01-1.212-1.213l1.125-4.495a2 2 0 01.47-.878L15.232 2.232z"
+                                      />
+                                  </svg>
+                              </span>
+                              {/* Remove icon */}
+                              <span
+                                  className="cursor-pointer text-gray-500 hover:text-red-500"
+                                  onClick={() => handleRemoveAddress(alamat.address_id)}
+                              >
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                      className="h-5 w-5"
+                                  >
+                                      <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M6 18L18 6M6 6l12 12"
+                                      />
+                                  </svg>
+                              </span>
+                          </div>
+                      </div>
+                    </label>
+                    {isCollapsed === alamat.address_id && (
+                        <div className="transition-all duration-300" id={`collapse-${alamat.address_id}`} data-te-collapse-item>
+                            <div className="px-4 md:px-6 lg:px-8">
+                            <form onSubmit={handleSubmitAlamat}>
+                              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span className="w-1/4 text-left px-2">Name</span>
+                                <input
+                                  name="recipient_name"
+                                  className="focus:outline-none px-3 w-3/4"
+                                  value={alamat.recipient_name}
+                                  onChange={handleInputChange}
+                                />
+                              </label>
+                              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span className="w-1/4 text-left px-2">No Whatsapp</span>
+                                <input
+                                  name="phone_number"
+                                  className="focus:outline-none px-3 w-3/4"
+                                  value={alamat.phone_number}
+                                  onChange={handleInputChange}
+                                />
+                              </label>
+                              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span className="w-1/4 text-left px-2">Alamat</span>
+                                <input
+                                  name="address"
+                                  type="text"
+                                  value={alamat.address}
+                                  onChange={handleInputChange}
+                                  className="focus:outline-none px-3 w-3/4"
+                                />
+                              </label>
+                              <div className="flex justify-end">
+                                    {/* <button 
+                                        type="submit" 
+                                        className="inline-flex justify-center submit-button px-4 py-2 rounded-full bg-pink-400 text-white focus:ring focus:outline-none my-2 text-lg font-semibold transition-colors" 
+                                    >
+                                        Simpan Alamat 
+                                    </button> */}
+                                </div>
+                        </form>
+                                
+                        </div>
+
+                            
+                            
+                        </div>
+                    )}
+                </React.Fragment>
+            ))}
+        </>
+        
+      </div>
+
+      
+              
+      
         {showConfirmationModal && (
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-4 rounded shadow-md">
@@ -289,42 +414,7 @@ const Checkout = () => {
             </div>
           </div>
         )}
-        <a
-          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-black shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] border border-white hover:border-white"
-          href="#"
-          role="button"
-          onClick={toggleCollapse}
-          aria-expanded={!isCollapsed}
-          aria-controls="collapseExample"
-        >
-          EDIT ALAMAT
-        </a>
-        <div className={`transition-all duration-300 ${isCollapsed ? 'hidden' : '!visible'}`} id="collapseExample" data-te-collapse-item>
-          <div className="block rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-800 dark:text-neutral-50">
-            {/* Your Form */}
-            <form>
-              <label className="block mb-4">
-                Nama:
-                <input type="text" name="name" className="border border-gray-300 p-2 rounded-md w-full" />
-              </label>
-              <label className="block mb-4">
-                Alamat:
-                <input type="text" name="alamat" className="border border-gray-300 p-2 rounded-md w-full" />
-              </label>
-              <label className="block mb-4">
-                Nomor Handphone:
-                <input type="text" name="nomor_hp" className="border border-gray-300 p-2 rounded-md w-full" />
-              </label>
-              {/* Add your form fields and submit button as needed */}
-              <button
-                type="submit"
-                className="bg-primary text-white px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-white hover:text-black"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
+       
       </div>
     );
     

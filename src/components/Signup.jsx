@@ -14,6 +14,18 @@ export default function Signup({ onToggleForm }) {
   const [profileImage, setProfileImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [imageUploadUrl, setImageUploadUrl] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+    const handleImagesChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
   
   const handleImageUpload = async (file) => {
     const formData = new FormData();
@@ -185,23 +197,29 @@ export default function Signup({ onToggleForm }) {
                 />
               </div>
 
+              <div className="bg-gray-100 w-full lg:w-64  flex items-center mb-3">
+                <div className="flex flex-col items-center bg-gray-100 w-full lg:w-64  flex items-center mb-3" >
+                <label className="flex flex-col justify-center items-center w-full h-full bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                    <div id="preview-container" className="flex flex-col justify-center items-center w-full h-full" style={{ maxWidth: '250px', maxHeight: '250px'}}>
+                        {imagePreview ? (
+                            <img src={imagePreview} alt="Preview" style={{ maxWidth: '250px', maxHeight: '250px', width: 'auto', height: 'auto' }} />
+                        ) : (
+                            <>
+                                <svg className="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h10m-7 4h7"></path>
+                                </svg>
+                                <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x800px)</p>
+                            </>
+                        )}
+                    </div>
+                    <input type="file" name="profile_image" className="hidden" onChange={handleImagesChange} />
+                </label>
+            </div>
+        </div>
+
        
 
-              <div className="bg-gray-100 w-full lg:w-64 p-2 flex items-center mb-3">
-        <input
-          type="file"
-          name="profile_image"
-          onChange={handleImageChange}
-          className="bg-gray-100 outline-none text-sm flex-1"
-        />
-      </div>
-
-             {/* Image preview section */}
-             {imagePreviewUrl && (
-        <div className="mb-3">
-          <img src={imagePreviewUrl} alt="Profile Preview" className="w-20 h-20 object-cover rounded-full" />
-        </div>
-      )}
       
               <div className="flex justify-between w-full lg:w-64 mb-5">
                 <label className="flex items-center text-xs">
