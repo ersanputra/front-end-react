@@ -191,11 +191,34 @@ const Checkout = () => {
                 value={`${alamat.address_id}`}
                 className="mr-4"
               />
-              <div>
-                <span className="font-semibold">{alamat.recipient_name} ({alamat.phone_number})</span>
-                <p className="text-gray-500">{alamat.address}</p>
+              <div className="flex items-center justify-between w-full">
+                <div>
+                  <span className="font-semibold">{alamat.recipient_name} ({alamat.phone_number})</span>
+                  <p className="text-gray-500">{alamat.address}</p>
+                </div>
+                <div>
+                  {/* X icon */}
+                  <span
+                    className="cursor-pointer text-gray-500 hover:text-red-500"
+                    onClick={() => handleRemoveAddress(alamat.address_id)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="h-5 w-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </span>
+                </div>
               </div>
-              <div></div>
             </label>
           ))}
         </div>
@@ -227,20 +250,18 @@ const Checkout = () => {
               </label>
               {/* Add your form fields and submit button as needed */}
               <button
-  type="submit"
-  className="bg-primary text-white px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-white hover:text-black"
->
-  Submit
-</button>
-
+                type="submit"
+                className="bg-primary text-white px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-white hover:text-black"
+              >
+                Submit
+              </button>
             </form>
           </div>
         </div>
       </div>
     );
+    
   };
-  
-  
 
 
   return (
