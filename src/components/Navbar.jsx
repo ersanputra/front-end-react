@@ -6,10 +6,16 @@ import { TbTruckDelivery } from 'react-icons/tb';
 import { FaWallet } from 'react-icons/fa';
 import { MdFavorite, MdHistory, MdHome } from 'react-icons/md';
 import Cart from '@/components/ShoppingCart';
-
+import { removeCookie } from "@/utils/cookies";
+import { useRouter } from "next/router";
 
 const Navbar = ({ toggleCart }) => {
   const [nav, setNav] = useState(false);
+  const router = useRouter();
+  const logout = () => {
+    removeCookie("userData");
+    router.reload("/");
+  };
 
   return (
     <div className='max-w-[1640px] mx-auto flex justify-between items-center p-4'>
@@ -123,7 +129,7 @@ const Navbar = ({ toggleCart }) => {
             </li>
           </ul>
 
-          <button>Log Out</button>
+          <button  onClick={logout} >Log Out</button>
         </nav>
       </div>
     </div>
