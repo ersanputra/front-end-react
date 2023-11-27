@@ -155,3 +155,30 @@ export const getOrderByIdOrder = async (order_id) => {
         throw error;
     }
 }
+
+export const updateAlamat = async (payload, address_id) => {
+    try {
+      const response = await api.put(`/api/addresses/${address_id}`, payload);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message);
+      } else {
+        console.error('Error:', error);
+      }
+    }
+  };
+
+  
+export const deleteAlamat = async (address_id) => {
+    try {
+      const response = await api.put(`/api/addresses/${address_id}`);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message);
+      } else {
+        console.error('Error:', error);
+      }
+    }
+  };
