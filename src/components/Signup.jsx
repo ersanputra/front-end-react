@@ -29,12 +29,12 @@ export default function Signup({ onToggleForm }) {
   
   const handleImageUpload = async (file) => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
 
     try {
       // Replace 'your-api-endpoint' with the actual API endpoint
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/api/upload/profile`, {
+      const response = await fetch(`${apiBaseUrl}/api/images/upload/profile`, {
         method: 'POST',
         body: formData,
       });

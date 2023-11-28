@@ -1,4 +1,4 @@
-import React {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import History from '@/components/History';
 import Navbar2 from '@/components/Navbar2';
 import { getCookie, setCookie } from "@/utils/cookies";
