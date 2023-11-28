@@ -29,7 +29,7 @@ export default function Signup({ onToggleForm }) {
   
   const handleImageUpload = async (file) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('image', file);
 
     try {
       // Replace 'your-api-endpoint' with the actual API endpoint
