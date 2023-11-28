@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import SignIn from '@/components/Form';
 import Signup from '@/components/Signup';
 import { useRouter } from 'next/router';
+import { ToastContainer } from 'react-toastify';
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(true);
@@ -21,6 +22,7 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: '#ffd700' }}>
+      <ToastContainer />
       <Header />
       {showSignIn ? (
         <SignIn onToggleForm={handleToggleForm} setUserIsLoggedIn={setUserIsLoggedIn} />

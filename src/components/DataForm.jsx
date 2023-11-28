@@ -4,6 +4,7 @@ import { useState, useEffect, useRef  } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, addressId }) => {
@@ -146,19 +147,31 @@ const Checkout = () => {
       });
   
       if (!isValid) {
-        alert('Silahkan isikan semua data.');
+        //alert('Silahkan isikan semua data.');
+        toast.error("Silahkan isikan semua data.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000
+        });
         return;
       } else {
         const formData = new FormData(formRef.current);
         const data = Object.fromEntries(formData.entries());
         
         if (!data.address_id && !data.recipient_name) {
-          alert('Silahkan isikan semua data.');
+          //alert('Silahkan isikan semua data.');
+          toast.error("Silahkan isikan semua data.", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000
+          });
           //console.log("Baik address_id dan recipient_name kosong.");
         } else if (!data.address_id && data.recipient_name) {
           try {
             // Call your API or handle the form data
             await postCheckout(data);
+            toast.success("Pesanan berhasil dibuat.", {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 3000
+            });
             router.push("/history");
           } catch (error) {
             console.error('Error in form submission:', error);
@@ -169,6 +182,10 @@ const Checkout = () => {
           try {
             // Call your API or handle the form data
             await postCheckout(data);
+            toast.success("Pesanan berhasil dibuat.", {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 3000
+            });
             router.push("/history");
           } catch (error) {
             console.error('Error in form submission:', error);
@@ -196,6 +213,7 @@ const Checkout = () => {
   
     const update = await updateAlamat(payload, addressItem.address_id);
     if (update) {
+      
       setIsCollapsed(null)
     }
   };

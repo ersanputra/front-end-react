@@ -1,7 +1,9 @@
 // components/ProductDetail.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiOutlineArrowCircleRight } from 'react-icons/hi';
 import { postCartItem } from '@/rest/api'; 
+import { toast } from 'react-toastify';
+
 
 export default function ProductDetail({ product }) {
   const [quantity, setQuantity] = useState(1);
@@ -21,10 +23,18 @@ export default function ProductDetail({ product }) {
       // Asumsi Anda memiliki cara untuk mendapatkan cartId, misalnya dari user context
       
       await postCartItem({  cakeId: product.cake_id, quantity });
-      alert('Produk ditambahkan ke keranjang');
+      //alert('Produk ditambahkan ke keranjang');
+      toast.success("Produk ditambahkan ke keranjang.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000
+      });
     } catch (error) {
       console.error('Error adding to cart:', error);
-      alert('Gagal menambahkan ke keranjang');
+      //alert('Gagal menambahkan ke keranjang');
+      toast.error("Produk ditambahkan ke keranjang.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000
+    });
     }
   };
   

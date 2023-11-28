@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getCookie } from "@/utils/cookies";
+import { toast } from 'react-toastify';
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
@@ -27,7 +28,10 @@ export const postLogin = async ({
         
     } catch (error) {
         if (error) {
-            alert(error.response.data.message);            
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000
+        });        
         }
     }
 }
@@ -46,7 +50,11 @@ export const postRegistrtion = async ({
       return response.data;
   } catch (error) {
       if (error) {
-          alert(error.response.data.message);            
+          //alert(error.response.data.message);      
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000
+        });     
       }
   }
 }
@@ -71,7 +79,10 @@ export const postCartItem = async ({ cakeId, quantity }) => {
         return response.data;
     } catch (error) {
         if (error) {
-            alert(error.response.data.message);            
+          toast.error(error.response.data.message, {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 5000
+          });              
         }
     }
   }

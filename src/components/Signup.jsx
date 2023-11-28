@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaFacebookF, FaInstagram, FaGoogle, FaRegEnvelope, FaRegUser } from 'react-icons/fa';
 import { MdLockOutline, MdOutlineSmartphone } from 'react-icons/md';
 import { postRegistrtion } from '@/rest/api'; // Assuming postRegistration is the correct function name
+import { toast } from 'react-toastify';
 
 const signInBackgroundImageUrl = 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8fDA%3D';
 const backgroundImageUrl = 'https://images.unsplash.com/photo-1622090860720-c4a77e146284?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80';
@@ -12,24 +13,25 @@ export default function Signup({ onToggleForm }) {
   const [full_name, setFull_name] = useState('');
   const [phone_number, setPhone_number] = useState('');
   const [profileImage, setProfileImage] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [imageUploadUrl, setImageUploadUrl] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
     const handleImagesChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setProfileImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result);
             };
             reader.readAsDataURL(file);
+            handleImageUpload(file)
         }
     };
   
   const handleImageUpload = async (file) => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
 
     try {
       // Replace 'your-api-endpoint' with the actual API endpoint
@@ -46,28 +48,6 @@ export default function Signup({ onToggleForm }) {
       }
     } catch (error) {
       console.error('Error uploading image:', error);
-    }
-  };
-
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     handleImageUpload(file);
-  //   }
-  // };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setProfileImage(file);
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreviewUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreviewUrl(null);
     }
   };
 
@@ -88,11 +68,11 @@ export default function Signup({ onToggleForm }) {
 
   const serviceRegistrtion = async (e) => {
       e.preventDefault();
-  
+      //console.log(profileImage);
       // First, upload the image
-      if (profileImage) {
-        await handleImageUpload(profileImage);
-    }
+    //   if (profileImage) {
+    //     await handleImageUpload(profileImage);
+    // }
   
       // Then, register the user with the image URL
       const registrationData = {
@@ -106,7 +86,10 @@ export default function Signup({ onToggleForm }) {
     const isSuccess = await postRegistrtion(registrationData);
   
       if (isSuccess && isSuccess.status === 'success') {
-          alert(isSuccess.message);
+        toast.success("Registrasi Berhasil !!!", {
+          position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000
+        });
           onToggleForm();
       }
   };

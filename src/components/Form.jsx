@@ -7,7 +7,8 @@ import url from 'url'; // Import the url library
 import { getCookie, setCookie } from "@/utils/cookies";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const signInBackgroundImageUrl = 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fGNha2V8ZW58MHx8MHx8fDA%3D';
 const backgroundImageUrl = 'https://images.unsplash.com/photo-1622090860720-c4a77e146284?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80';
@@ -42,10 +43,15 @@ export default function Form({ onToggleForm }) {
         setCookie("userData", JSON.stringify(isSuccess.data), {
             expires: 1
         })
-        
-        
-        alert("LOGIN BERHASIL !!!");
-        router.reload("/");
+        //alert("LOGIN BERHASIL !!!");
+        toast.success("LOGIN BERHASIL !!!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000
+        });
+        router.reload();
+        setTimeout(() => {
+            router.push('/home');
+        }, 1000);
     }
 
   }
