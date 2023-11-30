@@ -116,14 +116,23 @@ const History = () => {
                 <div className="mb-2">
                   {order.OrderDetails.map((detail) => (
                     <div key={detail.order_detail_id} className="flex items-center mb-2">
-                    <img 
-                      src={detail.Cake.image} 
-                      alt={detail.Cake.name} 
-                      className="w-10 h-10 object-cover mr-2 rounded" // Adjust size as needed
-                    />
-                    <p className="text-gray-900">
-                      {detail.Cake.name} (Qty: {detail.quantity})
-                    </p>
+
+
+                      {
+                            detail.Cake 
+                              ? <>
+                                  <img 
+                                    src={detail.Cake.image} 
+                                    alt={detail.Cake.name} 
+                                    className="w-10 h-10 object-cover mr-2 rounded" // Adjust size as needed
+                                  />
+                                  <p className="text-gray-900">
+                                    {detail.Cake.name} (Qty: {detail.quantity})
+                                  </p>
+                                </>
+                              : null 
+                          }
+                    
                   </div>
                   ))}
                 </div>
